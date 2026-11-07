@@ -84,17 +84,8 @@ enum custom_keycodes {
 #define SYMBOLS OSL(SYM)
 #define TO_BASE TO(BASE)
 
-uint16_t get_tap_keycode(uint16_t keycode) {
-  switch (keycode) {
-    case QK_MOD_TAP ... QK_MOD_TAP_MAX:
-      return QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
-#ifndef NO_ACTION_LAYER
-    case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:
-      return QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
-#endif  // NO_ACTION_LAYER
-  }
-  return keycode;
-}
+// Note: get_tap_keycode() (MT/LT keycode -> tap keycode) is provided by QMK
+// core since 0.29.0 (quantum/action.h), so it must not be redefined here.
 
 /// Combos
 const uint16_t caps_combo[] PROGMEM = {KC_J, KC_COMM, COMBO_END};
