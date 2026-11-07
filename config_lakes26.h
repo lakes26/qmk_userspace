@@ -28,3 +28,13 @@
 #define CAPS_WORD_INVERT_ON_SHIFT
 // When idle, turn off Layer Lock after 60 seconds.
 #define LAYER_LOCK_IDLE_TIMEOUT 60000
+
+// Cyclotab: tapping the app switcher holds Cmd/GUI for a moment, so you can
+// tap repeatedly to cycle; the next other key press completes the switch.
+#define CYCLOTAB_KEYS G(KC_TAB)
+
+// Speed curve for Orbital Mouse (getreuer's).
+#define ORBITAL_MOUSE_SPEED_CURVE \
+      {24, 24, 24, 32, 62, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72, 72}
+//     |               |               |               |           |
+// t = 0.000           1.024           2.048           3.072       3.840 s

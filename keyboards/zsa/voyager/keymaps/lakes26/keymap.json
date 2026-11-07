@@ -1,0 +1,7 @@
+{
+  "modules": [
+    "getreuer/cyclotab",
+    "getreuer/orbital_mouse",
+    "getreuer/select_word"
+  ]
+}

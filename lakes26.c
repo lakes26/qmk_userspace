@@ -46,11 +46,22 @@ enum layers {
     BASE,
     SYM,
     NUM,
+    NAV,
+    EXT,
+    FUN,
 };
 
 enum custom_keycodes {
     USRNAME = SAFE_RANGE,
     UPDIR,
+
+    // OS-aware hotkeys: Cmd-based on macOS, Ctrl-based otherwise.
+    HK_UNDO,
+    HK_CUT,
+    HK_COPY,
+    HK_PSTE,
+    HK_SALL,
+    HK_BACK,
 
     // Macros invoked through the Magic key.
     M_DOCSTR,
@@ -80,18 +91,29 @@ enum custom_keycodes {
 #define HOME_I RALT_T(KC_I)
 
 #define NUM_G LT(NUM, KC_G)
+#define NAV_ESC LT(NAV, KC_ESC)
+// Tap: ':' (handled in process_record_user), hold: EXT layer.
+#define EXT_COL LT(EXT, KC_SCLN)
 
 #define SYMBOLS OSL(SYM)
 #define TO_BASE TO(BASE)
+
+// App switcher, handled by Cyclotab (see CYCLOTAB_KEYS in config_lakes26.h).
+// Cmd+Tab on macOS, Super+Tab (switch applications) on GNOME.
+#define APPSWCH G(KC_TAB)
+#define PREVTAB C(S(KC_TAB))  // Previous / next tab in browsers and most apps.
+#define NEXTTAB C(KC_TAB)
 
 // Note: get_tap_keycode() (MT/LT keycode -> tap keycode) is provided by QMK
 // core since 0.29.0 (quantum/action.h), so it must not be redefined here.
 
 /// Combos
 const uint16_t caps_combo[] PROGMEM = {KC_J, KC_COMM, COMBO_END};
+const uint16_t f_n_combo[] PROGMEM = {KC_F, HOME_N, COMBO_END};
 
 combo_t key_combos[] = {
-    COMBO(caps_combo, CW_TOGG),
+    COMBO(caps_combo, CW_TOGG),    // J and , => activate Caps Word.
+    COMBO(f_n_combo, OSL(FUN)),    // F and N => FUN layer (one-shot).
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -330,7 +352,49 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     }
   }
 
+  // Magic after mouse wheel or Select Word reverses the direction.
+  switch (keycode) {
+    case MS_WHLU: return MS_WHLD;
+    case MS_WHLD: return MS_WHLU;
+#ifdef COMMUNITY_MODULE_SELECT_WORD_ENABLE
+    case SELWBAK: return SELWORD;
+    case SELWORD: return SELWBAK;
+#endif  // COMMUNITY_MODULE_SELECT_WORD_ENABLE
+  }
+
   return KC_TRNS;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// OS-aware hotkeys
+////////////////////////////////////////////////////////////////////////////////
+// True when the host is detected as macOS/iOS, in which case Cmd is used for
+// shortcuts like copy and paste instead of Ctrl.
+static bool host_is_mac(void) {
+#ifdef OS_DETECTION_ENABLE
+  switch (detected_host_os()) {
+    case OS_MACOS:
+    case OS_IOS:
+      return true;
+    default:
+      break;
+  }
+#endif  // OS_DETECTION_ENABLE
+  return false;
+}
+
+// Maps an HK_* keycode to the hotkey for the current host OS.
+static uint16_t os_hotkey(uint16_t keycode) {
+  const bool mac = host_is_mac();
+  switch (keycode) {
+    case HK_UNDO: return mac ? G(KC_Z) : C(KC_Z);
+    case HK_CUT:  return mac ? G(KC_X) : C(KC_X);
+    case HK_COPY: return mac ? G(KC_C) : C(KC_C);
+    case HK_PSTE: return mac ? G(KC_V) : C(KC_V);
+    case HK_SALL: return mac ? G(KC_A) : C(KC_A);
+    case HK_BACK: return mac ? G(KC_LBRC) : A(KC_LEFT);  // Browser back.
+  }
+  return KC_NO;
 }
 
 // An enhanced version of SEND_STRING: if Caps Word is active, the Shift key is
@@ -378,6 +442,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
        keycode == KC_O || keycode == KC_U || keycode == KC_Y)) {
     set_last_keycode(KC_N);
     set_last_mods(0);
+  }
+
+  switch (keycode) {
+    // Hold behavior: switches to EXT layer.
+    // Tap behavior: types ':' (LT() can't take a shifted keycode directly).
+    case EXT_COL:
+      if (record->tap.count) {
+        if (record->event.pressed) {
+          tap_code16_delay(KC_COLN, TAP_CODE_DELAY);
+        }
+        return false;
+      }
+      return true;
+
+    case HK_UNDO ... HK_BACK:  // OS-aware hotkeys.
+      if (record->event.pressed) {
+        register_code16(os_hotkey(keycode));
+      } else {
+        unregister_code16(os_hotkey(keycode));
+      }
+      return false;
   }
 
   if (record->event.pressed) {
