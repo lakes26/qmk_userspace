@@ -29,7 +29,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                  KC_COLN, KC_BSLS,
 
                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                      XXXXXXX, KC_LSFT, KC_LGUI, KC_LALT, KC_LCTL, XXXXXXX,
+                      XXXXXXX, KC_LSFT, KC_LGUI, KC_LCTL, KC_LALT, XXXXXXX,
                       KC_PLUS, KC_BSPC, KC_TAB , KC_SPC , KC_DOT , USRNAME,
                       KC_SLSH, KC_AMPR, KC_LBRC, KC_RBRC, KC_AT  , _______,
              KC_LSFT, TO_BASE
