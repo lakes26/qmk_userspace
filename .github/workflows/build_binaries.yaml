@@ -11,7 +11,9 @@ jobs:
     uses: qmk/.github/.github/workflows/qmk_userspace_build.yml@main
     with:
       qmk_repo: qmk/qmk_firmware
-      qmk_ref: master
+      # Pinned to a release so upstream breaking changes can't silently break
+      # the build. Bump deliberately (QMK releases breaking changes quarterly).
+      qmk_ref: 0.34.7
 
   publish:
     name: 'QMK Userspace Publish'
