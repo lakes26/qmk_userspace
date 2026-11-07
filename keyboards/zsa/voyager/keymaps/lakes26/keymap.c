@@ -4,7 +4,6 @@
 
 #include QMK_KEYBOARD_H
 
-#include "voyager.h"
 #include "layout.h"
 #include "lakes26.c"
 

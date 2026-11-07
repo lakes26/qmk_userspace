@@ -94,15 +94,6 @@ combo_t key_combos[] = {
     COMBO(caps_combo, CW_TOGG),
 };
 
-/// Chordal hold
-#ifdef CHORDAL_HOLD
-bool get_chordal_hold(
-        uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record,
-        uint16_t other_keycode, keyrecord_t* other_record) {
-  return get_chordal_hold_default(tap_hold_record, other_record);
-}
-#endif  // CHORDAL_HOLD
-
 /// Caps word
 #ifdef CAPS_WORD_ENABLE
 bool caps_word_press_user(uint16_t keycode) {
@@ -224,7 +215,7 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
       case KC_AT: return USRNAME;      // @ -> <username>
       case KC_COMM:
         if ((mods & MOD_MASK_SHIFT) != 0) {
-          return KC_EQL;  // ! -> =
+          return KC_EQL;  // < -> = (for <=)
         }
         return M_NOOP;
       case KC_QUOT:
