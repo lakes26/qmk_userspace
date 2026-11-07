@@ -10,13 +10,13 @@
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_LR(  // Base layer: Magic Sturdy.
-    XXXXXXX, XXXXXXX, XXXXXXX, KC_DOWN, KC_UP  , XXXXXXX,
+    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
     KC_TAB , KC_V   , KC_M   , KC_L   , KC_C   , KC_P   ,
     KC_BSPC, HOME_S , HOME_T , HOME_R , HOME_D , KC_Y   ,
     EXT_COL, KC_X   , KC_K   , KC_J   , NUM_G  , KC_W   ,
                                                  KC_SPC , NAV_ESC,
 
-                      KC_HOME, KC_LEFT, KC_RGHT, KC_END , APPSWCH, KC_MPLY,
+                      KC_HOME, XXXXXXX, XXXXXXX, KC_END , APPSWCH, KC_MPLY,
                       KC_B   , MAGIC  , KC_U   , KC_O   , KC_Q   , KC_SLSH,
                       KC_F   , HOME_N , HOME_E , HOME_A , HOME_I , XXXXXXX,
                       KC_Z   , KC_H   , KC_COMM, KC_DOT , KC_SCLN, KC_ENT ,

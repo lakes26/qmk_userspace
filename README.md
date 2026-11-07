@@ -14,7 +14,7 @@ layer below.
 
 ```
 BASE
-  ·     ·     ·     ↓     ↑     ·          Home  ←     →     End   App⁵  ⏯
+  ·     ·     ·     ·     ·     ·          Home  ·     ·     End   App⁵  ⏯
   Tab   V     M     L     C     P          B     ✦     U     O     Q     /
   Bsp   S⌥    T⌃    R⌘    D⇧    Y          F     N⇧    E⌘    A⌃    I⌥    ·
   :¹    X     K     J     G²    W          Z     H     ,     .     ;     Ent
