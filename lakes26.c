@@ -264,6 +264,83 @@ bool caps_word_press_user(uint16_t keycode) {
 }
 #endif  // CAPS_WORD_ENABLE
 
+///////////////////////////////////////////////////////////////////////////////
+// Sentence case (https://getreuer.info/posts/keyboards/sentence-case), as in
+// getreuer's keymap. Automatically capitalizes the first letter of sentences.
+///////////////////////////////////////////////////////////////////////////////
+#ifdef COMMUNITY_MODULE_SENTENCE_CASE_ENABLE
+char sentence_case_press_user(uint16_t keycode, keyrecord_t* record,
+                              uint8_t mods) {
+  if ((mods & ~(MOD_MASK_SHIFT | MOD_BIT_RALT)) == 0) {
+    const bool shifted = mods & MOD_MASK_SHIFT;
+    switch (keycode) {
+      case KC_A ... KC_Z:
+      case M_THE:
+      case M_ION:
+      case M_MENT:
+      case M_TMENT:
+        return 'a';  // Letter key.
+
+      case KC_DOT:  // Both . and Shift . (?) punctuate sentence endings.
+      case KC_EXLM:
+      case KC_QUES:
+        return '.';
+
+      case KC_COMM:  // Shift , is ! (key override), which ends a sentence.
+        return shifted ? '.' : '#';
+
+      case KC_2 ... KC_0:  // 2 3 4 5 6 7 8 9 0
+      case KC_AT ... KC_RPRN:  // @ # $ % ^ & * ( )
+      case KC_MINS ... KC_SCLN:  // - = [ ] backslash ;
+      case KC_UNDS ... KC_COLN:  // _ + { } | :
+      case KC_GRV:
+        return '#';  // Symbol key.
+
+      case KC_SPC:
+        return ' ';  // Space key.
+
+      case KC_QUOT:
+      case KC_DQUO:
+        return '\'';  // Quote key.
+    }
+  }
+
+  // Otherwise clear Sentence Case to initial state.
+  sentence_case_clear();
+  return '\0';
+}
+#endif  // COMMUNITY_MODULE_SENTENCE_CASE_ENABLE
+
+///////////////////////////////////////////////////////////////////////////////
+// Repeat key (https://docs.qmk.fm/features/repeat_key), as in getreuer's keymap.
+///////////////////////////////////////////////////////////////////////////////
+bool remember_last_key_user(uint16_t keycode, keyrecord_t* record,
+                            uint8_t* remembered_mods) {
+  // Unpack tapping keycode for tap-hold keys.
+  keycode = get_tap_keycode(keycode);
+
+#ifdef COMMUNITY_MODULE_SENTENCE_CASE_ENABLE
+  if (is_sentence_case_primed() &&
+      sentence_case_press_user(keycode, record, *remembered_mods) == 'a') {
+    *remembered_mods |= MOD_BIT_LSHIFT;
+  }
+#endif  // COMMUNITY_MODULE_SENTENCE_CASE_ENABLE
+
+  // Forget Shift on most letters when Shift or AltGr are the only mods. Some
+  // letters are excluded, e.g. for "NN" and "ZZ" in Vim.
+  switch (keycode) {
+    case KC_A ... KC_H:
+    case KC_K ... KC_M:
+    case KC_O ... KC_U:
+      if ((*remembered_mods & ~(MOD_MASK_SHIFT | MOD_BIT_RALT)) == 0) {
+        *remembered_mods &= ~MOD_MASK_SHIFT;
+      }
+      break;
+  }
+
+  return true;
+}
+
 // The following describes the magic key functionality, where * represents the
 // magic key and @ the repeat key. For example, tapping A and then the magic key
 // types "ao". Most of this is coded in my `get_alt_repeat_key_keycode_user()`
@@ -489,6 +566,36 @@ static bool process_rgb_keys(uint16_t keycode, uint8_t shift_mods) {
 #else
 #define process_rgb_keys(keycode, shift_mods) true
 #endif  // PaletteFx and Lumino
+
+////////////////////////////////////////////////////////////////////////////////
+// Status LEDs (VOYAGER_USER_LEDS is defined in the Voyager keymap's config.h).
+////////////////////////////////////////////////////////////////////////////////
+#ifdef VOYAGER_USER_LEDS
+// LED 1 (left top): a layer other than BASE is active, including a pending
+// one-shot SYM or FUN layer.
+layer_state_t layer_state_set_user(layer_state_t state) {
+  STATUS_LED_1(get_highest_layer(state) != BASE);
+  return state;
+}
+
+#ifdef COMMUNITY_MODULE_SENTENCE_CASE_ENABLE
+// LED 2 (left bottom): Sentence Case is primed to capitalize the next letter.
+void sentence_case_primed(bool primed) {
+  STATUS_LED_2(primed);
+}
+#endif  // COMMUNITY_MODULE_SENTENCE_CASE_ENABLE
+
+// LED 3 (right top): Caps Word is active.
+void caps_word_set_user(bool active) {
+  STATUS_LED_3(active);
+}
+
+// LED 4 (right bottom): a layer is locked with Layer Lock.
+bool layer_lock_set_user(layer_state_t locked_layers) {
+  STATUS_LED_4(locked_layers != 0);
+  return true;
+}
+#endif  // VOYAGER_USER_LEDS
 
 // An enhanced version of SEND_STRING: if Caps Word is active, the Shift key is
 // held while sending the string. Additionally, the last key is set such that if

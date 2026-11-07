@@ -29,6 +29,9 @@
 // When idle, turn off Layer Lock after 60 seconds.
 #define LAYER_LOCK_IDLE_TIMEOUT 60000
 
+// When idle, turn off Sentence Case after 2 seconds.
+#define SENTENCE_CASE_TIMEOUT 2000
+
 // Cyclotab: tapping the app switcher holds Cmd/GUI for a moment, so you can
 // tap repeatedly to cycle; the next other key press completes the switch.
 #define CYCLOTAB_KEYS G(KC_TAB)

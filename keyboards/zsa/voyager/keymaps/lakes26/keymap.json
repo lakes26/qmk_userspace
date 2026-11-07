@@ -4,6 +4,7 @@
     "getreuer/lumino",
     "getreuer/orbital_mouse",
     "getreuer/palettefx",
-    "getreuer/select_word"
+    "getreuer/select_word",
+    "getreuer/sentence_case"
   ]
 }
