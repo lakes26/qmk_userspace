@@ -55,6 +55,13 @@ enum custom_keycodes {
     USRNAME = SAFE_RANGE,
     UPDIR,
 
+    // RGB lighting controls (PaletteFx), as in getreuer's keymap.
+    RGBNEXT,  // Next effect (Shift: previous).
+    RGBHUP,   // Next palette (Shift: previous).
+    RGBHRND,  // Random palette.
+    RGBDEF1,  // Preset 1: Flow effect, Hero palette.
+    RGBDEF2,  // Preset 2: Ripple effect, Rose Gold palette.
+
     // OS-aware hotkeys: Cmd-based on macOS, Ctrl-based otherwise.
     HK_UNDO,
     HK_CUT,
@@ -103,6 +110,28 @@ enum custom_keycodes {
 #define APPSWCH G(KC_TAB)
 #define PREVTAB C(S(KC_TAB))  // Previous / next tab in browsers and most apps.
 #define NEXTTAB C(KC_TAB)
+
+#ifdef COMMUNITY_MODULE_PALETTEFX_ENABLE
+enum palette_names {  // User-defined PaletteFx palettes (palettefx_user.inc).
+  PALETTEFX_MECHA = PALETTEFX_USER_0,
+  PALETTEFX_HERO = PALETTEFX_USER_1,
+};
+#endif  // COMMUNITY_MODULE_PALETTEFX_ENABLE
+
+#if defined(COMMUNITY_MODULE_PALETTEFX_ENABLE) && \
+    defined(COMMUNITY_MODULE_LUMINO_ENABLE)
+// A cheap pseudorandom generator (used for random lighting presets).
+static uint8_t myrand(void) {
+  static uint16_t state = 1;
+#ifdef __CHIBIOS__  // Use high-res timer on ChibiOS.
+  state += (uint16_t)chVTGetSystemTimeX();
+#else
+  state += timer_read();
+#endif
+  state *= UINT16_C(36563);
+  return state >> 8;
+}
+#endif  // PaletteFx and Lumino
 
 // Note: get_tap_keycode() (MT/LT keycode -> tap keycode) is provided by QMK
 // core since 0.29.0 (quantum/action.h), so it must not be redefined here.
@@ -397,6 +426,70 @@ static uint16_t os_hotkey(uint16_t keycode) {
   return KC_NO;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// RGB Matrix lighting (Lumino + PaletteFx), following getreuer.
+////////////////////////////////////////////////////////////////////////////////
+#if defined(COMMUNITY_MODULE_PALETTEFX_ENABLE) && \
+    defined(COMMUNITY_MODULE_LUMINO_ENABLE)
+static void lighting_set_palette(uint8_t palette) {
+  if (lumino_get_value() == 0) {  // If lighting is off, turn it on.
+    lumino_cycle_3_state();
+  }
+  rgb_matrix_enable_noeeprom();
+  rgb_matrix_sethsv_noeeprom(
+      RGB_MATRIX_HUE_STEP * palette, 255, rgb_matrix_get_val());
+}
+
+static void lighting_preset(uint8_t effect, uint8_t palette) {
+  lighting_set_palette(palette);
+  rgb_matrix_mode_noeeprom(effect);
+  rgb_matrix_set_speed_noeeprom(60);
+}
+
+void keyboard_post_init_user(void) {
+  // Start with a random PaletteFx effect and palette.
+  lighting_preset(
+      RGB_MATRIX_COMMUNITY_MODULE_PALETTEFX_FLOW + (myrand() % 4), myrand());
+}
+
+static bool process_rgb_keys(uint16_t keycode, uint8_t shift_mods) {
+  switch (keycode) {
+    case RGBNEXT:
+      if (shift_mods) {
+        rgb_matrix_step_reverse_noeeprom();
+      } else {
+        rgb_matrix_step_noeeprom();
+      }
+      return false;
+
+    case RGBHUP:
+      if (shift_mods) {
+        rgb_matrix_decrease_hue_noeeprom();
+      } else {
+        rgb_matrix_increase_hue_noeeprom();
+      }
+      return false;
+
+    case RGBHRND:
+      lighting_set_palette(myrand());
+      return false;
+
+    case RGBDEF1:
+      lighting_preset(
+          RGB_MATRIX_COMMUNITY_MODULE_PALETTEFX_FLOW, PALETTEFX_HERO);
+      return false;
+
+    case RGBDEF2:
+      lighting_preset(
+          RGB_MATRIX_COMMUNITY_MODULE_PALETTEFX_RIPPLE, PALETTEFX_ROSEGOLD);
+      return false;
+  }
+  return true;
+}
+#else
+#define process_rgb_keys(keycode, shift_mods) true
+#endif  // PaletteFx and Lumino
+
 // An enhanced version of SEND_STRING: if Caps Word is active, the Shift key is
 // held while sending the string. Additionally, the last key is set such that if
 // the Repeat Key is pressed next, it produces `repeat_keycode`. This helper is
@@ -463,6 +556,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         unregister_code16(os_hotkey(keycode));
       }
       return false;
+  }
+
+  if (record->event.pressed && !process_rgb_keys(keycode, shift_mods)) {
+    return false;
   }
 
   if (record->event.pressed) {

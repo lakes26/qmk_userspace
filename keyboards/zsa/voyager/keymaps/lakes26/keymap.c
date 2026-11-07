@@ -74,9 +74,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
              OM_BTN1, QK_LLCK
   ),
-  [FUN] = LAYOUT_LR(  // Function keys, media, and bootloader (F + N combo).
+  [FUN] = LAYOUT_LR(  // F-keys, media, RGB lighting, bootloader (F + N combo).
     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+    LUMINO , RGBNEXT, RGBHUP , RGBHRND, RGBDEF1, RGBDEF2,
     XXXXXXX, KC_LALT, KC_LCTL, KC_LGUI, KC_LSFT, XXXXXXX,
     XXXXXXX, KC_MPRV, KC_MNXT, KC_VOLD, KC_VOLU, KC_MUTE,
                                                  XXXXXXX, XXXXXXX,

@@ -1,7 +1,9 @@
 {
   "modules": [
     "getreuer/cyclotab",
+    "getreuer/lumino",
     "getreuer/orbital_mouse",
+    "getreuer/palettefx",
     "getreuer/select_word"
   ]
 }
