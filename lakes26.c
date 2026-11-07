@@ -94,6 +94,74 @@ combo_t key_combos[] = {
     COMBO(caps_combo, CW_TOGG),
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// Tap-hold configuration (https://docs.qmk.fm/tap_hold), following getreuer.
+///////////////////////////////////////////////////////////////////////////////
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
+  switch (keycode) {
+    // A shorter tapping term for the Shift home row mods makes it easier to
+    // type capital letters.
+    case HOME_D:
+    case HOME_N:
+      return TAPPING_TERM - 45;
+    default:
+      return TAPPING_TERM;
+  }
+}
+
+uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
+  // If you quickly hold a tap-hold key after tapping it, the tap action is
+  // repeated. Key repeating is useful e.g. for Vim navigation keys, but can
+  // lead to missed triggers in fast typing. Here, returning 0 means we
+  // instead want to "force hold" and disable key repeating.
+  switch (keycode) {
+    case QK_MOD_TAP ... QK_MOD_TAP_MAX:
+    case QK_LAYER_TAP ... QK_LAYER_TAP_MAX:  // For MT and LT tap-hold keys.
+      switch (keycode) {
+        case HOME_N:  // Keep key repeat on N, e.g. for "n" in Vim.
+          return QUICK_TAP_TERM;
+        default:
+          return 0;  // Disable Quick Tap for other MT and LT keys.
+      }
+    default:
+      // Enable for tap-hold keys besides MT and LT.
+      return QUICK_TAP_TERM;
+  }
+}
+
+#ifdef FLOW_TAP_TERM
+// Flow Tap: when a home row mod is pressed within a short time after a letter,
+// it is immediately settled as tapped. This prevents misfires in fast typing.
+uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t* record,
+                           uint16_t prev_keycode) {
+  // Only apply Flow Tap when following a letter key, and not hotkeys.
+  if (get_tap_keycode(prev_keycode) <= KC_Z &&
+      (get_mods() & MOD_MASK_CAG) == 0) {
+    switch (keycode) {
+      case HOME_S:
+      case HOME_R:
+      case HOME_E:
+      case HOME_I:
+        return FLOW_TAP_TERM;
+
+      case HOME_T:
+      case HOME_A:
+        return FLOW_TAP_TERM - 25;
+    }
+  }
+
+  return 0;  // Disable Flow Tap otherwise, including on the Shift keys D, N.
+}
+#endif  // FLOW_TAP_TERM
+
+#ifdef SPECULATIVE_HOLD
+// Speculative Hold applies a mod-tap's modifier immediately on key down, so
+// that e.g. Cmd + mouse click doesn't have to wait for the tapping term.
+bool get_speculative_hold(uint16_t keycode, keyrecord_t* record) {
+  return true;  // Enable for all mods.
+}
+#endif  // SPECULATIVE_HOLD
+
 /// Caps word
 #ifdef CAPS_WORD_ENABLE
 bool caps_word_press_user(uint16_t keycode) {
