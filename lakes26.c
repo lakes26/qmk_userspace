@@ -223,6 +223,8 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
           return M_DOCSTR;  // " -> ""<cursor>"""
         }
         return KC_T;
+      case KC_DQUO:  // " typed from the SYM layer (KC_DQUO, not Shift+').
+        return M_DOCSTR;  // " -> ""<cursor>"""
       case KC_GRV:  // ` -> ``<cursor>``` (for Markdown code)
         return M_MKGRVS;
       case KC_SLSH:
