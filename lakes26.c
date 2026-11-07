@@ -95,6 +95,29 @@ combo_t key_combos[] = {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// Key Overrides (https://docs.qmk.fm/features/key_overrides), as in getreuer's
+// keymap. Shift + , and Shift + . produce ! and ? for easier punctuation; < and
+// > remain on the SYM layer.
+///////////////////////////////////////////////////////////////////////////////
+#ifdef KEY_OVERRIDE_ENABLE
+const key_override_t dot_key_override =
+    ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_QUES);  // Shift . is ?
+const key_override_t comm_key_override =
+    ko_make_basic(MOD_MASK_SHIFT, KC_COMM, KC_EXLM);  // Shift , is !
+const key_override_t slsh_key_override =
+    ko_make_basic(MOD_MASK_SHIFT, KC_SLSH, KC_BSLS);  // Shift / is backslash
+const key_override_t mply_key_override =
+    ko_make_basic(MOD_MASK_SHIFT, KC_MPLY, KC_MNXT);  // Shift play is next
+
+const key_override_t* key_overrides[] = {
+    &dot_key_override,
+    &comm_key_override,
+    &slsh_key_override,
+    &mply_key_override,
+};
+#endif  // KEY_OVERRIDE_ENABLE
+
+///////////////////////////////////////////////////////////////////////////////
 // Tap-hold configuration (https://docs.qmk.fm/tap_hold), following getreuer.
 ///////////////////////////////////////////////////////////////////////////////
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t* record) {
@@ -283,7 +306,7 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
       case KC_AT: return USRNAME;      // @ -> <username>
       case KC_COMM:
         if ((mods & MOD_MASK_SHIFT) != 0) {
-          return KC_EQL;  // < -> = (for <=)
+          return KC_EQL;  // ! -> = (Shift , is ! via key override)
         }
         return M_NOOP;
       case KC_QUOT:
