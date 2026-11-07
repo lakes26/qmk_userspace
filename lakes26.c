@@ -1,3 +1,9 @@
+// lakes26's QMK keymap logic, shared by the keymaps in this userspace.
+//
+// Much of this file is adapted from Pascal Getreuer's keymap,
+// https://github.com/getreuer/qmk-keymap, which is
+// Copyright Google LLC and licensed under the Apache License, Version 2.0
+// (https://www.apache.org/licenses/LICENSE-2.0).
 
 // This keymap uses Ikcelaks' Magic Sturdy layout for the base layer (see
 // https://github.com/Ikcelaks/keyboard_layouts). I've also made some twists of
