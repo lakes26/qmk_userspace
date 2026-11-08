@@ -31,4 +31,7 @@ for layer in "${LAYERS[@]}"; do
   keymap -c "$TOOLS/config.yaml" draw "$TMP/keymap.yaml" "$TOOLS/combos.yaml" \
     -s "$layer" -o "$OUT/layer-$name.svg"
 done
+
+# 4. Bigger single-character legends and yellow hold bands (getreuer-style).
+python3 "$TOOLS/postprocess.py" "$OUT"/keymap.svg "$OUT"/layer-*.svg
 echo "Wrote $OUT/keymap.svg and $OUT/layer-*.svg"

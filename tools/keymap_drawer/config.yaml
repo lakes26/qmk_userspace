@@ -3,7 +3,7 @@
 # Used by tools/draw_keymap.sh to draw the diagrams in doc/.
 parse_config:
   trans_legend: {t: "▽", type: trans}
-  sticky_label: "one-shot"
+  sticky_label: "1-shot"
   toggle_label: ""
   qmk_keycode_map:
     # keymap-drawer's defaults (setting this map replaces them).
@@ -42,14 +42,14 @@ parse_config:
     RABK: ">"
     QUES: "?"
     # Modifiers.
-    LALT: "⌥"
-    RALT: "⌥"
-    LCTL: "⌃"
-    RCTL: "⌃"
-    LGUI: "⌘"
-    RGUI: "⌘"
-    LSFT: "⇧"
-    RSFT: "⇧"
+    LALT: "$$mdi:apple-keyboard-option$$"
+    RALT: "$$mdi:apple-keyboard-option$$"
+    LCTL: "$$mdi:apple-keyboard-control$$"
+    RCTL: "$$mdi:apple-keyboard-control$$"
+    LGUI: "$$mdi:apple-keyboard-command$$"
+    RGUI: "$$mdi:apple-keyboard-command$$"
+    LSFT: "$$mdi:apple-keyboard-shift$$"
+    RSFT: "$$mdi:apple-keyboard-shift$$"
     # Editing and navigation.
     SPC: "Space"
     BSPC: "⌫"
@@ -75,14 +75,14 @@ parse_config:
   # Custom keycodes and specific bindings, matched on the raw keycode string.
   raw_binding_map:
     # Home row mods (keymap-drawer shows mod-tap holds as raw names otherwise).
-    "LALT_T(KC_S)": {t: "S", h: "⌥"}
-    "LCTL_T(KC_T)": {t: "T", h: "⌃"}
-    "LGUI_T(KC_R)": {t: "R", h: "⌘"}
-    "LSFT_T(KC_D)": {t: "D", h: "⇧"}
-    "RSFT_T(KC_N)": {t: "N", h: "⇧"}
-    "RGUI_T(KC_E)": {t: "E", h: "⌘"}
-    "RCTL_T(KC_A)": {t: "A", h: "⌃"}
-    "RALT_T(KC_I)": {t: "I", h: "⌥"}
+    "LALT_T(KC_S)": {t: "S", h: "$$mdi:apple-keyboard-option$$"}
+    "LCTL_T(KC_T)": {t: "T", h: "$$mdi:apple-keyboard-control$$"}
+    "LGUI_T(KC_R)": {t: "R", h: "$$mdi:apple-keyboard-command$$"}
+    "LSFT_T(KC_D)": {t: "D", h: "$$mdi:apple-keyboard-shift$$"}
+    "RSFT_T(KC_N)": {t: "N", h: "$$mdi:apple-keyboard-shift$$"}
+    "RGUI_T(KC_E)": {t: "E", h: "$$mdi:apple-keyboard-command$$"}
+    "RCTL_T(KC_A)": {t: "A", h: "$$mdi:apple-keyboard-control$$"}
+    "RALT_T(KC_I)": {t: "I", h: "$$mdi:apple-keyboard-option$$"}
     "QK_AREP": {t: "✦", s: "Magic"}
     "QK_REP": "Rep"
     "QK_LLCK": "Lock"
@@ -125,6 +125,13 @@ parse_config:
 draw_config:
   key_w: 60
   key_h: 56
+  # Single-character legends are enlarged by postprocess.py (text.big below);
+  # words longer than 6 characters are scaled down to fit the key.
+  shrink_wide_legends: 6
+  legend_rel_y: -6  # Room for the hold band at the bottom of the key.
+  glyph_tap_size: 22
+  glyph_hold_size: 21
+  glyph_shifted_size: 12
   split_gap: 30
   combo_w: 34
   combo_h: 24
@@ -137,7 +144,11 @@ draw_config:
     rect.key { fill: #efefef; stroke: #c9c9c9; stroke-width: 1.5; }
     rect.held, rect.combo.held { fill: #fde68a; stroke: #e0c341; }
     rect.combo { fill: #a5dcfa; stroke: #7cc3ea; }
-    text.hold { fill: #8a6d00; font-weight: bold; font-size: 12px; }
-    text.shifted { fill: #4b4b70; }
+    text.big { font-size: 22px; }
+    path.holdband { fill: #fde047; }
+    text.hold { fill: #1f2937; font-weight: bold; font-size: 13px; }
+    use.hold { fill: #1f2937; }
+    text.shifted { fill: #4b4b70; font-size: 12px; }
+    text.combo { font-size: 12px; }
     text.label { fill: #45507a; font-size: 15px; }
     rect.ghost, rect.combo.ghost { stroke-dasharray: 4, 4; }

@@ -9,8 +9,8 @@ uses his [community modules](https://github.com/getreuer/qmk-modules).
 
 The diagrams are drawn from the keymap with
 [keymap-drawer](https://github.com/caksoylar/keymap-drawer) (see
-[Regenerating the diagrams](#regenerating-the-diagrams)). Yellow labels at the
-bottom of a key show what it does when held, the yellow key is the one held to
+[Regenerating the diagrams](#regenerating-the-diagrams)). The yellow band at the
+bottom of a key shows what it does when held, the yellow key is the one held to
 reach that layer, and ▽ passes through to the layer below.
 
 ### BASE
@@ -144,6 +144,8 @@ The pieces live in [tools/keymap_drawer/](tools/keymap_drawer):
 - `config.yaml` sets the key labels and colors.
 - `combos.yaml` lists the combos by key position, since keymap-drawer can't
   read them from C. Update it when adding a combo.
+- `postprocess.py` enlarges single-character legends and adds the yellow hold
+  bands.
 
 ## License
 
