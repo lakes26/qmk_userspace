@@ -7,84 +7,71 @@ uses his [community modules](https://github.com/getreuer/qmk-modules).
 
 ## Layers
 
-The base layer is [Magic Sturdy](https://github.com/Ikcelaks/keyboard_layouts)
-with home row mods (`⌥ ⌃ ⌘ ⇧` = Alt, Ctrl, GUI/Cmd, Shift). `✦` is the Magic
-key (Alt Repeat), `Rep` the Repeat key, `·` unused, `(x)` passes through to the
-layer below.
+The diagrams are drawn from the keymap with
+[keymap-drawer](https://github.com/caksoylar/keymap-drawer) (see
+[Regenerating the diagrams](#regenerating-the-diagrams)). Yellow labels at the
+bottom of a key show what it does when held, the yellow key is the one held to
+reach that layer, and ▽ passes through to the layer below.
 
-```
-BASE
-  ·     ·     ·     ·     ·     ·          Home  ·     ·     End   App⁵  ⏯
-  Tab   V     M     L     C     P          B     ✦     U     O     Q     /
-  Bsp   S⌥    T⌃    R⌘    D⇧    Y          F     N⇧    E⌘    A⌃    I⌥    ·
-  :¹    X     K     J     G²    W          Z     H     ,     .     ;     Ent
-                          Spc   Esc³       Rep   Sym⁴
-```
+### BASE
 
-1. Tap `:`, hold for **EXT** (mouse).
-2. Tap G, hold for **NUM**.
-3. Tap Esc, hold for **NAV**.
-4. One-shot **SYM**: the next key comes from SYM (hold to stay on it).
-5. App switcher (Cmd+Tab on macOS, Super+Tab on GNOME) with
-   [Cyclotab](https://github.com/getreuer/qmk-modules/tree/main/cyclotab): tap
-   repeatedly to cycle; the next key press completes the switch.
+[Magic Sturdy](https://github.com/Ikcelaks/keyboard_layouts) with home row mods
+(⌥ ⌃ ⌘ ⇧ = Alt, Ctrl, Cmd, Shift). ✦ is the Magic key (Alt Repeat) and Rep the
+Repeat key.
 
-Combos: **J + ,** toggles Caps Word; **F + N** is the one-shot **FUN** layer.
-Key overrides: Shift + `,` = `!`, Shift + `.` = `?`, Shift + `/` = `\`,
-Shift + ⏯ = next track.
+![BASE layer](doc/layer-base.svg)
 
-```
-SYM (one-shot)
-  `     %     (     )     ;     ,          ·     ·     ·     ·     ·     ·
-  !     {     '     "     }     ?          ·     ⇧     ⌘     ⌃     ⌥     ·
-  #     ^     =     _     $     *          +     Bsp   Tab   Spc   .     usr
-  ~     <     |     -     >     /          /     &     [     ]     @     (Ent)
-                          :     \          ⇧     Base
+- Hold `:` for **EXT**, G for **NUM**, Esc for **NAV**. **SYM** is one-shot:
+  the next key comes from SYM (hold it to stay on SYM).
+- Combos: **J + ,** toggles Caps Word; **F + N** opens the one-shot **FUN**
+  layer.
+- Key overrides: Shift + `,` = `!`, Shift + `.` = `?`, Shift + `/` = `\`,
+  Shift + ⏯ = next track.
+- ⌘ Tab is an app switcher with
+  [Cyclotab](https://github.com/getreuer/qmk-modules/tree/main/cyclotab): tap
+  repeatedly to cycle; the next key press completes the switch.
 
-NUM (hold G)
-  ·     ·     ·     ·     ·     ·          ·     ·     ·     ·     ·     ·
-  ·     ·     ·     ·     ·     ·          Tab   8     9     4     +     /
-  ·     ⌥     ⌃     ⌘     ⇧     ·          :     1     2     3     -     *
-  ·     ·     ·     ⇧     (G)   ·          ,     7     6     5     .     (Ent)
-                          Base  Esc        0     Lock
+### SYM (one-shot)
 
-NAV (hold Esc)
-  (top row passes through from BASE)
-  ·     ·     ⇧⌃Tab ⌃Tab  ·     ·          PgUp  Home  ↑     End   ·     (/)
-  ·     ⌥     ⌃     ⌘     ⇧     SelLn      PgDn  ←     ↓     →     Del   ·
-  ·     Undo  Cut   Copy  Paste ·          ·     SelW← SelW→ ·     ·     (Ent)
-                          (Spc) (held)     (Rep) Lock
+![SYM layer](doc/layer-sym.svg)
 
-EXT (hold :) — Orbital Mouse
-  (top row passes through from BASE)
-  Fast  Undo  WhlL  Bsp   Spc   WhlR       WhlUp Click Fwd   RClk  Fast  (/)
-  Slow  ⌥     ⌃     ⌘     ⇧     SelLn      WhlDn TurnL Back  TurnR Slow  ·
-  (held) ·    Paste SelAl Copy  Cut        ·     ·     ·     ·     ·     (Ent)
-                          Back  Click      Click Lock
+### NUM (hold G)
 
-FUN (F + N, one-shot)
-  ·     ·     ·     ·     ·     ·          ·     ·     ·     ·     ·     Boot
-  Lum   Fx→   Pal→  PalRn Pre1  Pre2       ·     F8    F9    F4    F11   ·
-  SCase ⌥     ⌃     ⌘     ⇧     ·          ·     F1    F2    F3    F12   ·
-  ·     Prev  Next  Vol-  Vol+  Mute       ·     F7    F6    F5    ·     Reboot
-                          ·     ·          F10   Lock
-```
+![NUM layer](doc/layer-num.svg)
 
-- **Undo / Cut / Copy / Paste / SelAl (select all) / Back** send Cmd shortcuts
-  on macOS and Ctrl (or Alt+Left for Back) elsewhere, using QMK OS detection.
-- **SelW / SelLn**: [Select Word](https://github.com/getreuer/qmk-modules/tree/main/select_word)
-  selects the word / line; press repeatedly to extend. Magic after it reverses.
-- **Orbital Mouse**: Fwd/Back move along the current heading, TurnL/TurnR
-  steer, Fast/Slow change speed.
-- **Lum** cycles brightness off / 40% / 100%
-  ([Lumino](https://github.com/getreuer/qmk-modules/tree/main/lumino)).
-  **Fx→ / Pal→** step through [PaletteFx](https://github.com/getreuer/qmk-modules/tree/main/palettefx)
-  effects / palettes (hold Shift to go back), **PalRn** picks a random
-  palette, **Pre1 / Pre2** are presets.
-- **SCase** toggles [Sentence Case](https://github.com/getreuer/qmk-modules/tree/main/sentence_case),
+### NAV (hold Esc)
+
+![NAV layer](doc/layer-nav.svg)
+
+- Undo / Cut / Copy / Paste send Cmd shortcuts on macOS and Ctrl elsewhere,
+  using QMK OS detection.
+- [Select Word](https://github.com/getreuer/qmk-modules/tree/main/select_word):
+  Select word / Word back / Select line; press repeatedly to extend. Magic after
+  it reverses the direction.
+
+### EXT (hold `:`): mouse
+
+![EXT layer](doc/layer-ext.svg)
+
+- [Orbital Mouse](https://github.com/getreuer/qmk-modules/tree/main/orbital_mouse):
+  Mouse fwd / back move along the current heading, Steer ← / → turn it, Fast /
+  Slow change the speed.
+- Select all / Back (browser back) also follow the host OS.
+
+### FUN (F + N, one-shot)
+
+![FUN layer](doc/layer-fun.svg)
+
+- Bright cycles the lighting brightness off / 40% / 100%
+  ([Lumino](https://github.com/getreuer/qmk-modules/tree/main/lumino)). Effect /
+  Palette step through [PaletteFx](https://github.com/getreuer/qmk-modules/tree/main/palettefx)
+  effects and palettes (hold Shift to go back); Random palette and Preset 1 / 2
+  pick one directly.
+- Sentence case toggles
+  [Sentence Case](https://github.com/getreuer/qmk-modules/tree/main/sentence_case),
   which capitalizes the first letter of each sentence.
-- **Boot** enters the bootloader for flashing; **Lock** is Layer Lock (60 s
-  idle timeout).
+- Boot enters the bootloader for flashing; Lock is Layer Lock (60 s idle
+  timeout).
 
 ### Status LEDs
 
@@ -120,6 +107,8 @@ Same approach as getreuer ([config_lakes26.h](config_lakes26.h),
 | `config_lakes26.h`, `rules.mk` | Shared feature configuration |
 | `palettefx_user.inc` | Custom PaletteFx palettes |
 | `modules/getreuer` | Submodule: [getreuer/qmk-modules](https://github.com/getreuer/qmk-modules) |
+| `doc/` | Keymap diagrams (generated; see below) |
+| `tools/draw_keymap.sh`, `tools/keymap_drawer/` | Diagram generator |
 
 ## Building and flashing
 
@@ -136,6 +125,25 @@ Clone with `git clone --recurse-submodules`, or run
 
 Flash the `.bin` with [Keymapp](https://www.zsa.io/flash). To enter the
 bootloader, use the reset pinhole or press **F + N**, then **Boot** (top right).
+
+## Regenerating the diagrams
+
+The SVGs in `doc/` are drawn from `keymap.c` by
+[keymap-drawer](https://github.com/caksoylar/keymap-drawer). After changing the
+keymap, run:
+
+```sh
+pipx install keymap-drawer   # once (or: pip3 install keymap-drawer)
+tools/draw_keymap.sh
+```
+
+The pieces live in [tools/keymap_drawer/](tools/keymap_drawer):
+
+- `keymap_to_json.py` converts `keymap.c` to QMK keymap JSON. (`qmk c2json`
+  can't parse it because of `LAYOUT_LR` and the `#include "lakes26.c"`.)
+- `config.yaml` sets the key labels and colors.
+- `combos.yaml` lists the combos by key position, since keymap-drawer can't
+  read them from C. Update it when adding a combo.
 
 ## License
 

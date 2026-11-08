@@ -1,0 +1,143 @@
+# keymap-drawer configuration for the lakes26 Voyager keymap.
+# https://github.com/caksoylar/keymap-drawer
+# Used by tools/draw_keymap.sh to draw the diagrams in doc/.
+parse_config:
+  trans_legend: {t: "▽", type: trans}
+  sticky_label: "one-shot"
+  toggle_label: ""
+  qmk_keycode_map:
+    # keymap-drawer's defaults (setting this map replaces them).
+    XXXXXXX: ""
+    "NO": ""
+    MINS: "-"
+    EQL: "="
+    LBRC: "["
+    RBRC: "]"
+    BSLS: "\\"
+    SCLN: ";"
+    QUOT: "'"
+    GRV: "`"
+    COMM: ","
+    DOT: "."
+    SLSH: "/"
+    TILD: "~"
+    EXLM: "!"
+    AT: "@"
+    HASH: "#"
+    DLR: "$"
+    PERC: "%"
+    CIRC: "^"
+    AMPR: "&"
+    ASTR: "*"
+    LPRN: "("
+    RPRN: ")"
+    UNDS: "_"
+    PLUS: "+"
+    LCBR: "{"
+    RCBR: "}"
+    PIPE: "|"
+    COLN: ":"
+    DQUO: "\""
+    LABK: "<"
+    RABK: ">"
+    QUES: "?"
+    # Modifiers.
+    LALT: "⌥"
+    RALT: "⌥"
+    LCTL: "⌃"
+    RCTL: "⌃"
+    LGUI: "⌘"
+    RGUI: "⌘"
+    LSFT: "⇧"
+    RSFT: "⇧"
+    # Editing and navigation.
+    SPC: "Space"
+    BSPC: "⌫"
+    DEL: "Del"
+    ENT: "⏎"
+    TAB: "Tab"
+    ESC: "Esc"
+    LEFT: "←"
+    RGHT: "→"
+    UP: "↑"
+    DOWN: "↓"
+    HOME: "Home"
+    END: "End"
+    PGUP: "PgUp"
+    PGDN: "PgDn"
+    # Media.
+    MPLY: "$$mdi:play-pause$$"
+    MPRV: "$$mdi:skip-previous$$"
+    MNXT: "$$mdi:skip-next$$"
+    VOLU: "$$mdi:volume-plus$$"
+    VOLD: "$$mdi:volume-minus$$"
+    MUTE: "$$mdi:volume-off$$"
+  # Custom keycodes and specific bindings, matched on the raw keycode string.
+  raw_binding_map:
+    # Home row mods (keymap-drawer shows mod-tap holds as raw names otherwise).
+    "LALT_T(KC_S)": {t: "S", h: "⌥"}
+    "LCTL_T(KC_T)": {t: "T", h: "⌃"}
+    "LGUI_T(KC_R)": {t: "R", h: "⌘"}
+    "LSFT_T(KC_D)": {t: "D", h: "⇧"}
+    "RSFT_T(KC_N)": {t: "N", h: "⇧"}
+    "RGUI_T(KC_E)": {t: "E", h: "⌘"}
+    "RCTL_T(KC_A)": {t: "A", h: "⌃"}
+    "RALT_T(KC_I)": {t: "I", h: "⌥"}
+    "QK_AREP": {t: "✦", s: "Magic"}
+    "QK_REP": "Rep"
+    "QK_LLCK": "Lock"
+    "QK_BOOT": "Boot"
+    "QK_RBT": "Reboot"
+    "CW_TOGG": "Caps Word"
+    "G(KC_TAB)": "⌘ Tab"
+    "C(S(KC_TAB))": "Prev\ntab"
+    "C(KC_TAB)": "Next\ntab"
+    "USRNAME": "user\nname"
+    "HK_UNDO": "Undo"
+    "HK_CUT": "Cut"
+    "HK_COPY": "Copy"
+    "HK_PSTE": "Paste"
+    "HK_SALL": "Select\nall"
+    "HK_BACK": "Back"
+    "SELWORD": "Select\nword"
+    "SELWBAK": "Word\nback"
+    "SELLINE": "Select\nline"
+    "OM_U": "Mouse\nfwd"
+    "OM_D": "Mouse\nback"
+    "OM_L": "Steer\n←"
+    "OM_R": "Steer\n→"
+    "OM_BTN1": "Click"
+    "OM_BTN2": "Right\nclick"
+    "OM_W_U": "Wheel\n↑"
+    "OM_W_D": "Wheel\n↓"
+    "OM_W_L": "Wheel\n←"
+    "OM_W_R": "Wheel\n→"
+    "OM_FAST": "Fast"
+    "OM_SLOW": "Slow"
+    "LUMINO": "Bright"
+    "RGBNEXT": "Effect"
+    "RGBHUP": "Palette"
+    "RGBHRND": "Random\npalette"
+    "RGBDEF1": "Preset\n1"
+    "RGBDEF2": "Preset\n2"
+    "SENTENCE_CASE_TOGGLE": "Sentence\ncase"
+
+draw_config:
+  key_w: 60
+  key_h: 56
+  split_gap: 30
+  combo_w: 34
+  combo_h: 24
+  key_rx: 8
+  key_ry: 8
+  n_columns: 1
+  # Colors inspired by getreuer's diagrams: yellow for hold behaviors and the
+  # key holding the current layer, light blue for combos.
+  svg_extra_style: |
+    rect.key { fill: #efefef; stroke: #c9c9c9; stroke-width: 1.5; }
+    rect.held, rect.combo.held { fill: #fde68a; stroke: #e0c341; }
+    rect.combo { fill: #a5dcfa; stroke: #7cc3ea; }
+    text.hold { fill: #8a6d00; font-weight: bold; font-size: 12px; }
+    text.shifted { fill: #4b4b70; }
+    text.label { fill: #45507a; font-size: 15px; }
+    rect.ghost, rect.combo.ghost { stroke-dasharray: 4, 4; }
