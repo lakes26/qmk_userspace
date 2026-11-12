@@ -50,6 +50,10 @@
 
 enum layers {
     BASE,
+    // Trackball layer, turned on automatically while the ball is in use. It is
+    // the lowest layer above BASE so that the keys of any layer that is held,
+    // locked or one-shot take priority over it.
+    MOUSE,
     SYM,
     NUM,
     NAV,
@@ -572,6 +576,21 @@ static bool process_rgb_keys(uint16_t keycode, uint8_t shift_mods) {
 #else
 #define process_rgb_keys(keycode, shift_mods) true
 #endif  // PaletteFx and Lumino
+
+////////////////////////////////////////////////////////////////////////////////
+// Trackball (https://docs.qmk.fm/features/pointing_device)
+////////////////////////////////////////////////////////////////////////////////
+#ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+_Static_assert(AUTO_MOUSE_DEFAULT_LAYER == MOUSE,
+               "AUTO_MOUSE_DEFAULT_LAYER in config.h must be the MOUSE layer");
+_Static_assert(TRACKBALL_SCROLL_LAYER == EXT,
+               "TRACKBALL_SCROLL_LAYER in config.h must be the EXT layer");
+
+void pointing_device_init_user(void) {
+  // The automatic mouse layer is off until enabled here.
+  set_auto_mouse_enable(true);
+}
+#endif  // POINTING_DEVICE_AUTO_MOUSE_ENABLE
 
 ////////////////////////////////////////////////////////////////////////////////
 // Status LEDs (VOYAGER_USER_LEDS is defined in the Voyager keymap's config.h).

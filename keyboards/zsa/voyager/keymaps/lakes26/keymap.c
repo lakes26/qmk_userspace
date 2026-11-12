@@ -22,6 +22,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       KC_Z   , KC_H   , KC_COMM, KC_DOT , KC_SCLN, KC_ENT ,
              QK_REP , SYMBOLS
   ),
+  // Trackball layer: on automatically while the ball is in use. Only keys that
+  // do little on BASE are replaced, so that typing turns the layer off again:
+  // the Esc thumb is left click, and a top row key is right click.
+  [MOUSE] = LAYOUT_LR(
+    _______, _______, _______, _______, MS_BTN2, _______,
+    _______, _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______,
+                                                 _______, MS_BTN1,
+
+                      _______, _______, _______, _______, _______, _______,
+                      _______, _______, _______, _______, _______, _______,
+                      _______, _______, _______, _______, _______, _______,
+                      _______, _______, _______, _______, _______, _______,
+             _______, _______
+  ),
   [SYM] = LAYOUT_LR(  // Symbol layer (one-shot).
     KC_GRV , KC_PERC, KC_LPRN, KC_RPRN, KC_SCLN, KC_COMM,
     KC_EXLM, KC_LCBR, KC_QUOT, KC_DQUO, KC_RCBR, KC_QUES,
@@ -61,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       XXXXXXX, SELWBAK, SELWORD, XXXXXXX, XXXXXXX, _______,
              _______, QK_LLCK
   ),
-  [EXT] = LAYOUT_LR(  // Mouse (Orbital Mouse) and extras (hold :).
+  [EXT] = LAYOUT_LR(  // Mouse and extras (hold :). The trackball scrolls.
     _______, _______, _______, _______, _______, _______,
     OM_FAST, HK_UNDO, OM_W_L , KC_BSPC, KC_SPC , OM_W_R ,
     OM_SLOW, KC_LALT, KC_LCTL, KC_LGUI, KC_LSFT, SELLINE,
@@ -71,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                       _______, _______, _______, _______, _______, _______,
                       OM_W_U , OM_BTN1, OM_U   , OM_BTN2, OM_FAST, _______,
                       OM_W_D , OM_L   , OM_D   , OM_R   , OM_SLOW, _______,
-                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                      XXXXXXX, NV_CPID, NV_CPIU, XXXXXXX, XXXXXXX, _______,
              OM_BTN1, QK_LLCK
   ),
   [FUN] = LAYOUT_LR(  // F-keys, media, RGB lighting, bootloader (F + N combo).

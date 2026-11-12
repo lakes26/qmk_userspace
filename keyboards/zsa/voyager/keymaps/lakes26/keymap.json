@@ -5,6 +5,7 @@
     "getreuer/orbital_mouse",
     "getreuer/palettefx",
     "getreuer/select_word",
-    "getreuer/sentence_case"
+    "getreuer/sentence_case",
+    "lakes26/navigator_trackball"
   ]
 }

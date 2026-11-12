@@ -3,7 +3,9 @@
 My [QMK](https://docs.qmk.fm) keymap for the [ZSA Voyager](https://www.zsa.io/voyager),
 kept as a [QMK External Userspace](https://docs.qmk.fm/newbs_external_userspace).
 It is based on [@getreuer's keymap](https://github.com/getreuer/qmk-keymap) and
-uses his [community modules](https://github.com/getreuer/qmk-modules).
+uses his [community modules](https://github.com/getreuer/qmk-modules). A
+[ZSA Navigator](https://www.zsa.io/navigator) trackball is attached to the
+right half.
 
 ## Layers
 
@@ -31,6 +33,23 @@ Repeat key.
   [Cyclotab](https://github.com/getreuer/qmk-modules/tree/main/cyclotab): tap
   repeatedly to cycle; the next key press completes the switch.
 
+### MOUSE (automatic, with the trackball)
+
+![MOUSE layer](doc/layer-mouse.svg)
+
+- Moving the ball turns this layer on. It turns off 650 ms after the last
+  ball movement or click, or as soon as any other key is pressed. That key
+  works normally, so typing can continue right away. Status LED 1 is lit while
+  the layer is on.
+- While it is on, the Esc thumb key is the left mouse button and the top row
+  key above C is the right mouse button. Home row mods still work, e.g. hold R
+  (⌘) and click.
+- To scroll, hold `:` (the EXT layer) and roll the ball.
+- This is QMK's
+  [automatic mouse layer](https://docs.qmk.fm/features/pointing_device#pointing-device-auto-mouse).
+  The trackball driver is ZSA's, ported to upstream QMK in
+  [modules/lakes26/navigator_trackball](modules/lakes26/navigator_trackball).
+
 ### SYM (one-shot)
 
 ![SYM layer](doc/layer-sym.svg)
@@ -53,9 +72,11 @@ Repeat key.
 
 ![EXT layer](doc/layer-ext.svg)
 
-- [Orbital Mouse](https://github.com/getreuer/qmk-modules/tree/main/orbital_mouse):
-  Mouse fwd / back move along the current heading, Steer ← / → turn it, Fast /
-  Slow change the speed.
+- While this layer is on, the trackball scrolls instead of moving the pointer.
+  Ball slower / faster change the pointer speed (not saved across restarts).
+- [Orbital Mouse](https://github.com/getreuer/qmk-modules/tree/main/orbital_mouse)
+  moves the pointer from the keys: Mouse fwd / back move along the current
+  heading, Steer ← / → turn it, Fast / Slow change the speed.
 - Select all / Back (browser back) also follow the host OS.
 
 ### FUN (F + N, one-shot)
@@ -107,6 +128,7 @@ Same approach as getreuer ([config_lakes26.h](config_lakes26.h),
 | `config_lakes26.h`, `rules.mk` | Shared feature configuration |
 | `palettefx_user.inc` | Custom PaletteFx palettes |
 | `modules/getreuer` | Submodule: [getreuer/qmk-modules](https://github.com/getreuer/qmk-modules) |
+| `modules/lakes26/navigator_trackball` | ZSA's Navigator trackball driver, ported to upstream QMK |
 | `doc/` | Keymap diagrams (generated; see below) |
 | `tools/draw_keymap.sh`, `tools/keymap_drawer/` | Diagram generator |
 
@@ -153,4 +175,7 @@ The userspace template is from [qmk/qmk_userspace](https://github.com/qmk/qmk_us
 (GPL-2.0, see [LICENSE](LICENSE)). Code adapted from
 [getreuer/qmk-keymap](https://github.com/getreuer/qmk-keymap) is Copyright
 Google LLC and licensed under the
-[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). The
+trackball driver in `modules/lakes26/navigator_trackball` is adapted from
+[zsa/qmk_modules](https://github.com/zsa/qmk_modules), Copyright ZSA Technology
+Labs, Inc, GPL-2.0-or-later.

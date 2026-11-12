@@ -364,9 +364,15 @@ rect.ghost, rect.combo.ghost { stroke-dasharray: 4, 4; }
 </g>
 <g transform="translate(616, 213)" class="key keypos-43">
 <rect rx="8" ry="8" x="-26" y="-26" width="52" height="52" class="key"/>
+<text x="0" y="-6" class="key tap">
+<tspan x="0" dy="-0.6em">Ball</tspan><tspan x="0" dy="1.2em">slower</tspan>
+</text>
 </g>
 <g transform="translate(672, 196)" class="key keypos-44">
 <rect rx="8" ry="8" x="-26" y="-26" width="52" height="52" class="key"/>
+<text x="0" y="-6" class="key tap">
+<tspan x="0" dy="-0.6em">Ball</tspan><tspan x="0" dy="1.2em">faster</tspan>
+</text>
 </g>
 <g transform="translate(728, 207)" class="key keypos-45">
 <rect rx="8" ry="8" x="-26" y="-26" width="52" height="52" class="key"/>
